@@ -3,7 +3,7 @@ Future conjunction detection.
 """
 
 import math
-from trajectory import predict_trajectory
+from simulation.trajectory import predict_trajectory
 
 CONJUNCTION_THRESHOLD_KM = 5.0
 

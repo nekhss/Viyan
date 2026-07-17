@@ -1,73 +1,95 @@
 import { PromptDecorator as Prompt, ExecutionContext } from '@nitrostack/core';
 
-export class ViyanPrompts{
+export class ViyanPrompts {
+
   @Prompt({
-    name: 'calculator_help',
-    description: 'Get help with calculator operations',
+    name: 'analyze_collision_risk',
+    description: 'Generate guidance for analyzing satellite collision risk.',
     arguments: [
       {
-        name: 'operation',
-        description: 'The operation to get help with (optional)',
+        name: 'satellite',
+        description: 'Optional satellite name or NORAD ID',
         required: false
       }
     ]
   })
-  async getHelp(args: any, ctx: ExecutionContext) {
-    ctx.logger.info('Generating calculator help prompt');
+  async analyzeCollisionRisk(args: any, ctx: ExecutionContext) {
 
-    const operation = args.operation;
+    ctx.logger.info('Generating collision risk prompt');
 
-    if (operation) {
-      // Help for specific operation
-      const helpText = this.getOperationHelp(operation);
+    const satellite = args?.satellite;
+
+    if (satellite) {
       return [
         {
           role: 'user' as const,
-          content: `How do I use the ${operation} operation in the calculator?`
+          content: `Analyze the collision risk for satellite "${satellite}".`
         },
         {
           role: 'assistant' as const,
-          content: helpText
+          content:
+            `Use the VIYAN MCP tools to:
+1. Retrieve conjunction information.
+2. Assess the collision risk.
+3. Predict collision probability using the ML model.
+4. Recommend an avoidance maneuver if required.`
         }
       ];
     }
 
-    // General help
     return [
       {
         role: 'user' as const,
-        content: 'How do I use the calculator?'
+        content: 'Analyze the latest satellite conjunctions.'
       },
       {
         role: 'assistant' as const,
-        content: `The calculator supports four basic operations:
+        content:
+`Use the VIYAN MCP tools in this order:
 
-1. **Addition** - Add two numbers together
-   Example: calculate(operation="add", a=5, b=3) = 8
+1. run_simulation
+2. get_conjunctions
+3. assess_risk
+4. predict_collision
+5. negotiate
 
-2. **Subtraction** - Subtract one number from another
-   Example: calculate(operation="subtract", a=10, b=4) = 6
-
-3. **Multiplication** - Multiply two numbers
-   Example: calculate(operation="multiply", a=6, b=7) = 42
-
-4. **Division** - Divide one number by another
-   Example: calculate(operation="divide", a=20, b=5) = 4
-
-Just call the 'calculate' tool with the operation and two numbers!`
+Summarize:
+- Number of conjunctions detected
+- Collision probability
+- Risk level
+- Recommended maneuver
+- Overall mission impact`
       }
     ];
   }
 
-  private getOperationHelp(operation: string): string {
-    const helps: Record<string, string> = {
-      add: 'Use addition to sum two numbers. Call calculate(operation="add", a=5, b=3) to get 8.',
-      subtract: 'Use subtraction to find the difference. Call calculate(operation="subtract", a=10, b=4) to get 6.',
-      multiply: 'Use multiplication to find the product. Call calculate(operation="multiply", a=6, b=7) to get 42.',
-      divide: 'Use division to find the quotient. Call calculate(operation="divide", a=20, b=5) to get 4. Note: Cannot divide by zero!'
-    };
 
-    return helps[operation] || 'Unknown operation. Available operations: add, subtract, multiply, divide.';
+  @Prompt({
+    name: 'simulation_summary',
+    description: 'Summarize the latest simulation results.',
+    arguments: []
+  })
+  async simulationSummary(_: any, ctx: ExecutionContext) {
+
+    ctx.logger.info('Generating simulation summary prompt');
+
+    return [
+      {
+        role: 'user' as const,
+        content: 'Summarize the latest VIYAN simulation.'
+      },
+      {
+        role: 'assistant' as const,
+        content:
+`Run the simulation and produce a concise report including:
+
+- Satellites analyzed
+- Conjunctions detected
+- Highest collision probability
+- Risk assessment
+- Recommended avoidance maneuver
+- Final mission status`
+      }
+    ];
   }
 }
-

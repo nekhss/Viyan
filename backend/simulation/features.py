@@ -4,8 +4,7 @@ Feature extraction for conjunction events.
 
 import math
 
-from satellite_registry import get_satellite_metadata
-
+from simulation.satellite_registry import get_satellite_metadata
 
 EARTH_RADIUS_KM = 6371.0
 
