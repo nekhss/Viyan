@@ -17,8 +17,3 @@ export const getNegotiation = () =>
 
 export const runSimulation = () =>
   api.post("/simulation/run");
-
-export const sendPrompt = (prompt: string) =>
-  api.post("/mcp/chat", {
-    prompt,
-  });
