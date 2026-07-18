@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from app.api.v1.weather import router as weather_router
 
 from app.api.v1.health import router as health_router
 from app.api.v1.mission import router as mission_router
@@ -17,3 +18,4 @@ api_router.include_router(simulation_router)
 api_router.include_router(negotiation_router)
 api_router.include_router(mcp_router)
 api_router.include_router(agent_log_router)
+api_router.include_router(weather_router)
