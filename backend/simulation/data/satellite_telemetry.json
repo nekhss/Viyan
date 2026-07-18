@@ -1,0 +1,35 @@
+[
+    {
+      "id": "ISS",
+      "name": "ISS (ZARYA)",
+      "latitude": 14.83,
+      "longitude": 76.25,
+      "altitude_km": 419.2,
+      "velocity_kms": 7.66,
+      "fuel_percent": 74,
+      "battery_percent": 93,
+      "health": "Healthy"
+    },
+    {
+      "id": "STARLINK-2103",
+      "name": "STARLINK-2103",
+      "latitude": -8.41,
+      "longitude": 121.42,
+      "altitude_km": 551.4,
+      "velocity_kms": 7.52,
+      "fuel_percent": 61,
+      "battery_percent": 87,
+      "health": "Nominal"
+    },
+    {
+      "id": "NOAA-20",
+      "name": "NOAA-20",
+      "latitude": 32.15,
+      "longitude": -41.67,
+      "altitude_km": 824.8,
+      "velocity_kms": 7.43,
+      "fuel_percent": 82,
+      "battery_percent": 96,
+      "health": "Healthy"
+    }
+  ]
