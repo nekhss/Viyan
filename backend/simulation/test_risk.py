@@ -16,3 +16,14 @@ if alerts:
 
     print("\n=== RISK ===")
     print(risk)
+
+from ml.shap_explainer import explain_prediction,generate_reasoning
+
+explanation = explain_prediction(features)
+
+print(explanation)
+
+reasons = generate_reasoning(explanation)
+
+print("\n=== REASONS ===")
+print(reasons)

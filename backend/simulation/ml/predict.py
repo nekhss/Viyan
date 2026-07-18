@@ -3,7 +3,10 @@ from typing import Dict
 
 import joblib
 
-from .preprocessing import prepare_features
+try:
+    from preprocessing import prepare_features
+except ImportError:
+    from .preprocessing import prepare_features
 
 
 BASE_DIR = Path(__file__).resolve().parent

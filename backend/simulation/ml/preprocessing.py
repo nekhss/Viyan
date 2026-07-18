@@ -10,11 +10,9 @@ FEATURE_COLUMNS = [
     "priority_difference",
 ]
 
+import pandas as pd
 
-def prepare_features(features: Dict) -> np.ndarray:
-    """
-    Convert simulation features into a machine-learning feature vector.
-    """
+def prepare_features(features: Dict):
 
     encounter = features["encounter"]
 
@@ -26,12 +24,13 @@ def prepare_features(features: Dict) -> np.ndarray:
         sat2["priority"]
     )
 
-    vector = np.array([
-        encounter["closest_distance_km"],
-        encounter["relative_velocity_km_s"],
-        encounter["altitude_difference_km"],
-        encounter["time_to_closest_sec"],
-        priority_difference
-    ], dtype=float)
-
-    return vector.reshape(1, -1)
+    return pd.DataFrame(
+        [[
+            encounter["closest_distance_km"],
+            encounter["relative_velocity_km_s"],
+            encounter["altitude_difference_km"],
+            encounter["time_to_closest_sec"],
+            priority_difference
+        ]],
+        columns=FEATURE_COLUMNS
+    )
