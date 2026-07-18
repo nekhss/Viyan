@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 
 from simulation.data_loader import load_satellites
+from simulation.trajectory import predict_trajectory
 from simulation.collision import detect_future_conjunctions
 from simulation.features import extract_features
 from simulation.risk import assess_risk
@@ -25,11 +26,15 @@ def run_simulation():
     conjunctions = detect_future_conjunctions(satellites)
 
     if not conjunctions:
-        raise HTTPException(status_code=404, detail="No conjunctions detected.")
+        raise HTTPException(
+            status_code=404,
+            detail="No conjunctions detected."
+        )
 
     results = []
 
     for conjunction in conjunctions:
+
         features = extract_features(conjunction)
 
         risk = assess_risk(features)
@@ -37,7 +42,12 @@ def run_simulation():
         probability = predict_collision_probability(features)
 
         negotiation = negotiate(features, risk)
-        decision = make_decision(features, risk, negotiation)
+
+        decision = make_decision(
+            features,
+            risk,
+            negotiation,
+        )
 
         results.append(
             {
@@ -97,7 +107,10 @@ def get_risk():
     conjunctions = detect_future_conjunctions(satellites)
 
     if not conjunctions:
-        raise HTTPException(status_code=404, detail="No conjunctions detected.")
+        raise HTTPException(
+            status_code=404,
+            detail="No conjunctions detected."
+        )
 
     features = extract_features(conjunctions[0])
 
@@ -117,13 +130,18 @@ def get_prediction():
     conjunctions = detect_future_conjunctions(satellites)
 
     if not conjunctions:
-        raise HTTPException(status_code=404, detail="No conjunctions detected.")
+        raise HTTPException(
+            status_code=404,
+            detail="No conjunctions detected."
+        )
 
     features = extract_features(conjunctions[0])
 
     probability = predict_collision_probability(features)
 
-    return {"collision_probability": probability}
+    return {
+        "collision_probability": probability
+    }
 
 
 @router.get("/negotiation")
@@ -137,7 +155,10 @@ def get_negotiation():
     conjunctions = detect_future_conjunctions(satellites)
 
     if not conjunctions:
-        raise HTTPException(status_code=404, detail="No conjunctions detected.")
+        raise HTTPException(
+            status_code=404,
+            detail="No conjunctions detected."
+        )
 
     features = extract_features(conjunctions[0])
 
@@ -146,3 +167,44 @@ def get_negotiation():
     negotiation = negotiate(features, risk)
 
     return negotiation
+
+
+@router.get("/satellite/{name}")
+def satellite_status(name: str):
+
+    satellites = load_satellites(
+        "stations",
+        force_refresh=True,
+    )
+
+    search = name.strip().lower()
+
+    satellite = next(
+        (
+            s
+            for s in satellites
+            if search in s["name"].strip().lower()
+        ),
+        None,
+    )
+
+    if satellite is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Satellite not found",
+        )
+
+    trajectory = predict_trajectory(
+        satellite,
+        minutes=1,
+        step=60,
+    )
+
+    current = trajectory[0]
+
+    return {
+        "name": satellite["name"],
+        "position": current["position"],
+        "velocity": current["velocity"],
+        "geographic": current["geographic"],
+    }

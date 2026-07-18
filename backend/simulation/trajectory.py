@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
 
-from skyfield.api import load, EarthSatellite
+from skyfield.api import load, EarthSatellite,wgs84
 
 ts = load.timescale()
 
@@ -35,6 +35,12 @@ def predict_trajectory(tle, minutes=30, step=60):
         # Velocity (km/s)
         vx, vy, vz = state.velocity.km_per_s
 
+        subpoint = wgs84.subpoint(state)
+
+        latitude = float(subpoint.latitude.degrees)
+        longitude = float(subpoint.longitude.degrees)
+        altitude = float(subpoint.elevation.km)
+
         trajectory.append({
 
             "time_offset": sec,
@@ -49,6 +55,12 @@ def predict_trajectory(tle, minutes=30, step=60):
                 "vx": float(vx),
                 "vy": float(vy),
                 "vz": float(vz)
+            },
+
+            "geographic": {
+            "latitude": latitude,
+            "longitude": longitude,
+           "altitude_km": altitude
             }
 
         })

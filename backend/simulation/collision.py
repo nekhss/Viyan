@@ -91,13 +91,15 @@ def detect_future_conjunctions(
                     "satellite1": {
                         "name": sat1["name"].strip(),
                         "position": closest["state1"]["position"],
-                        "velocity": closest["state1"]["velocity"]
+                        "velocity": closest["state1"]["velocity"],
+                        "geographic": closest["state1"]["geographic"]
                     },
 
                     "satellite2": {
                         "name": sat2["name"].strip(),
                         "position": closest["state2"]["position"],
-                        "velocity": closest["state2"]["velocity"]
+                        "velocity": closest["state2"]["velocity"],
+                        "geographic": closest["state2"]["geographic"]
                     },
 
                     "closest_distance_km": round(

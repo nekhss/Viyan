@@ -128,4 +128,29 @@ export class ViyanTools {
     return await response.json();
   }
 
+  @Tool({
+    name: "get_satellite_status",
+    description: "Get the real-time position, velocity, and geographic location of a satellite.",
+    inputSchema: z.object({
+      name: z.string().describe("Satellite name (e.g. ISS or SOYUZ)")
+    })
+  })
+  async getSatelliteStatus(
+    input: { name: string },
+    ctx: ExecutionContext
+  ) {
+
+    ctx.logger.info(`Fetching status for ${input.name}`);
+
+    const response = await fetch(
+      `http://127.0.0.1:8000/api/v1/simulation/satellite/${encodeURIComponent(input.name)}`
+    );
+
+    if (!response.ok) {
+      throw new Error(`Backend returned ${response.status}`);
+    }
+
+    return await response.json();
+  }
+
 }
